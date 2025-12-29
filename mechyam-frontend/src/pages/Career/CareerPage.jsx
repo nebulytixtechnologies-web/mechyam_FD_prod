@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+// import axios from "axios";
+import api from "../../api/axios.js"
 import { useNavigate } from "react-router-dom";
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+// const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 // Lucide Icons
 import { MapPin, Briefcase, Users } from "lucide-react";
@@ -16,8 +17,8 @@ const CareerPage = () => {
   useEffect(() => {
     const fetchJobs = async () => {
       try {
-        const response = await axios.get(
-          `${API_BASE_URL}/api/career/jobs/all`
+        const response = await api.get(
+          "/career/jobs/all"
         );
 
         // Safely extract the jobs list from API response
