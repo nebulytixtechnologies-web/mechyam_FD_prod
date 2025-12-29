@@ -13,14 +13,41 @@ export default function AdminProtectedRoute({ children }) {
       return;
     }
 
-    fetch(`${API_BASE_URL}/api/admin/auth/validate-token`, {
-      headers: { Authorization: `Bearer ${token}` },
-    })
-      .then((res) => setValid(res.ok))
-      .catch(() => setValid(false));
+//     fetch(`${API_BASE_URL}/api/admin/auth/validate-token`, {
+//       headers: { Authorization: `Bearer ${token}` },
+//     })
+//       .then((res) => setValid(res.ok))
+//       .catch(() => setValid(false));
+//   }, []);
+
+//   if (valid === null) return <p>Validating session...</p>;
+
+//   return valid ? children : <Navigate to="/admin/login" replace />;
+// }
+
+    const validateToken = async () => {
+      try {
+        await api.get("/admin/auth/validate-token", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        setValid(true);
+      } catch (error) {
+        console.error("Token validation failed:", error);
+        setValid(false);
+      }
+    };
+
+    validateToken();
   }, []);
 
-  if (valid === null) return <p>Validating session...</p>;
+  if (valid === null) {
+    return <p>Validating session...</p>;
+  }
 
   return valid ? children : <Navigate to="/admin/login" replace />;
 }
+
+            
