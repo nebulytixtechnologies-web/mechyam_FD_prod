@@ -1,6 +1,7 @@
 import { Navigate } from "react-router-dom";
 import { useEffect, useState } from "react";
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+// const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+import api from "../../api/axios.js";
 
 export default function AdminProtectedRoute({ children }) {
   const [valid, setValid] = useState(null);
