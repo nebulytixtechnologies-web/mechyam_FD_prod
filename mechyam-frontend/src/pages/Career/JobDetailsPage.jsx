@@ -1,7 +1,8 @@
 import React, { useState } from "react";
 import { useLocation } from "react-router-dom";
-import axios from "axios";
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+// import axios from "axios";
+// const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+import api from "../../api/axios.js";
 
 const JobDetailsPage = () => {
   const location = useLocation();
@@ -74,8 +75,8 @@ const JobDetailsPage = () => {
     submitData.append("resumeFile", formData.resumeFile);
 
     try {
-      await axios.post(
-        `${API_BASE_URL}/api/career/apply`,
+      await api.post(
+        "career/apply",
         submitData,
         {
           headers: { "Content-Type": "multipart/form-data" },
