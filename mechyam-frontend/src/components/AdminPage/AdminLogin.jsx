@@ -1,7 +1,8 @@
 import { useNavigate } from "react-router-dom";
 import React, { useState, useEffect } from "react";
 import OTPModal from "./OTPModal";
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+// const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+import api from "../../api/axios.js";
 
 const AdminLogin = () => {
   const navigate = useNavigate();
@@ -35,30 +36,39 @@ const AdminLogin = () => {
 
     try {
       // console.log("API_BASE_URL:", API_BASE_URL);
-      const response = await fetch(
-        `${API_BASE_URL}/api/admin/auth/login`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ email, password }),
-        }
-      );
+      // const response = await fetch(
+      //   `${API_BASE_URL}/api/admin/auth/login`,
+      //   {
+      //     method: "POST",
+      //     headers: { "Content-Type": "application/json" },
+      //     body: JSON.stringify({ email, password }),
+      //   }
+      // );
 
-      const data = await response.json();
+      // const data = await response.json();
+      const { data } = await api.post("/admin/auth/login", { email, password });
 
-      if (response.ok) {
-        if (!data.tempToken) {
+      // if (response.ok) {
+      //   if (!data.tempToken) {
+      //     setError("Error: No OTP token received.");
+      //     return;
+      //   }
+
+      //   setTempToken(data.tempToken);
+      //   setShowOTP(true);
+      // } else {
+      //   setError(data.message || "Invalid email or password");
+      // }
+      if (!data.tempToken) {
           setError("Error: No OTP token received.");
           return;
-        }
-
-        setTempToken(data.tempToken);
-        setShowOTP(true);
-      } else {
-        setError(data.message || "Invalid email or password");
       }
-    } catch {
-      setError("Server error, try again later");
+
+      setTempToken(data.tempToken);
+      setShowOTP(true);
+    } catch (err) {
+      console.error(err);
+      setError(err.response?.data?.message || "Server error, try again later");
     } finally {
       setLoading(false);
     }
@@ -73,7 +83,6 @@ const AdminLogin = () => {
   return (
     <div className="flex justify-center items-center min-h-screen bg-gradient-to-r from-blue-100 to-blue-200">
       <div className="bg-white p-10 rounded-2xl shadow-2xl w-[400px] relative">
-
         <h1 className="text-3xl font-bold text-center text-blue-900 mb-6">
           Admin Login
         </h1>
