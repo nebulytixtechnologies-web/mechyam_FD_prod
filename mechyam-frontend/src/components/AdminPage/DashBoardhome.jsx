@@ -2,9 +2,10 @@
 
 import React, { useEffect, useState } from "react";
 import { Briefcase, Users, Building2, PlusCircle, FileText } from  "lucide-react";
-import axios from "axios";
+// import axios from "axios";
 import Applications from "../../pages/Applications"; // ✅ imported
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+// const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+import api from "../../api/axios.js"
 
 const DashboardHome = ({ setActivePage }) => {
   const [stats, setStats] = useState({
@@ -25,20 +26,32 @@ const DashboardHome = ({ setActivePage }) => {
       try {
         const token = sessionStorage.getItem("adminToken");
 
-        const [jobsRes, clientsRes, projectsRes, applicationsRes] =
+        // const [jobsRes, clientsRes, projectsRes, applicationsRes] =
+        //   await Promise.all([
+        //     axios.get(`${API_BASE_URL}/api/career/jobs/all`, {
+        //       headers: { Authorization: `Bearer ${token}` },
+        //     }),
+        //     axios.get(`${API_BASE_URL}/clients/all`, {
+        //       headers: { Authorization: `Bearer ${token}` },
+        //     }),
+        //     axios.get(`${API_BASE_URL}/api/projects`, {
+        //       headers: { Authorization: `Bearer ${token}` },
+        //     }),
+        //     axios.get(`${API_BASE_URL}/api/career/applications`, {
+        //       headers: { Authorization: `Bearer ${token}` },
+        //     }),
+        //   ]);
+
+        const authHeader = {
+          header: { Authorization: `Bearer ${token}` },
+        };
+
+        const [jobRes, clientsRes, projectRes, applicationRes] =
           await Promise.all([
-            axios.get(`${API_BASE_URL}/api/career/jobs/all`, {
-              headers: { Authorization: `Bearer ${token}` },
-            }),
-            axios.get(`${API_BASE_URL}/clients/all`, {
-              headers: { Authorization: `Bearer ${token}` },
-            }),
-            axios.get(`${API_BASE_URL}/api/projects`, {
-              headers: { Authorization: `Bearer ${token}` },
-            }),
-            axios.get(`${API_BASE_URL}/api/career/applications`, {
-              headers: { Authorization: `Bearer ${token}` },
-            }),
+            api.get("/career/jobs/all", authHeader),
+            api.get("/clients/all", authHeader),
+            api.get("/projects", authHeader),
+            api.get("/career/applications", authHeader),
           ]);
 
         // ✅ Extract data safely
