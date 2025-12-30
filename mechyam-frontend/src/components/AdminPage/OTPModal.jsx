@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+// const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+import api from "../../api/axios.js";
 
 const OTPModal = ({ email, tempToken, onVerified, onClose }) => {
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);
@@ -57,29 +58,44 @@ const OTPModal = ({ email, tempToken, onVerified, onClose }) => {
     }
 
     setSubmitting(true);
+    setError(" ");
+  
     try {
-      const response = await fetch(
-        `${API_BASE_URL}/api/admin/auth/verify-otp`,
+      // const response = await fetch(
+      //   `${API_BASE_URL}/api/admin/auth/verify-otp`,
+      //   {
+      //     method: "POST",
+      //     headers: {
+      //       "Content-Type": "application/json",
+      //       Authorization: `Bearer ${tempToken}`,
+      //     },
+      //     body: JSON.stringify({ email, otp: otpCode }),
+      //   }
+      // );
+
+      // const data = await response.json();
+
+      // if (response.ok && data.token) {
+      //   sessionStorage.setItem("adminToken", data.token);
+      //   onVerified(data.token);
+      // } else {
+      //   setError(data.message || "Invalid OTP");
+      // }
+      const response = await api.post(
+        "/admin/auth/verify-otp",
+        { email, otp: otpCode },
         {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${tempToken}`,
-          },
-          body: JSON.stringify({ email, otp: otpCode }),
+          header: {Authorization: `Bearer ${tempToken}`},
         }
-      );
-
-      const data = await response.json();
-
-      if (response.ok && data.token) {
-        sessionStorage.setItem("adminToken", data.token);
-        onVerified(data.token);
+        );
+      if (response.data?.token) {
+        sessionStorage.setItem("adminToken", response.data.token);
+        onVerified(response.data.token);
       } else {
-        setError(data.message || "Invalid OTP");
+        setError("Invalid OTP");
       }
     } catch {
-      setError("Server error");
+      setError(err.response?.data?.message || "Server error");
     } finally {
       setSubmitting(false);
     }
