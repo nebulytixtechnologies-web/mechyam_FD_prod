@@ -1,8 +1,9 @@
 // src/components/AdminPage/JobList.jsx
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+// import axios from "axios";
+// const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+import api from "../../api/axios.js"
 
 const JobList = () => {
   // Holds all job records fetched from the backend
@@ -20,13 +21,18 @@ const JobList = () => {
   useEffect(() => {
     const fetchJobs = async () => {
       try {
-        const response = await axios.get(
-          `${API_BASE_URL}/api/career/jobs/all`
+        const token = sessionStorage.getItem("adminToken");
+        
+        const response = await api.get(
+          "/career/jobs/all",
+          {
+            headers: { Authorization: `Bearer ${token}` },
+          }
         );
 
         // Validate and extract jobs array from the response
-        const jobsArray =
-          response.data && Array.isArray(response.data.data)
+        const jobsArray = Array.isArray(response.data?.data)
+          // response.data && Array.isArray(response.data.data)
             ? response.data.data
             : [];
 
@@ -53,16 +59,22 @@ const JobList = () => {
    * Delete a job by ID and remove it from the UI after successful deletion.
    */
   const handleDelete = async (jobId) => {
-    const confirmDelete = window.confirm(
-      "Are you sure you want to delete this job?"
-    );
-    if (!confirmDelete) return;
+    if (!window.confirm(" Are you sure you want to delete this job?")) return;
+    // const confirmDelete = window.confirm(
+    //   "Are you sure you want to delete this job?"
+    // );
+    // if (!confirmDelete) return;
 
     setDeletingId(jobId);
 
     try {
-      await axios.delete(
-        `${API_BASE_URL}/api/career/jobs/${jobId}`
+      const token = sessionStorage.getItem("adminToken");
+      
+      await api.delete(
+        `/career/jobs/${jobId}`,
+        { 
+          headers: { authorization: `Bearer ${token}` },
+        }
       );
 
       // Update state after deletion
