@@ -23,7 +23,7 @@ const AppliedJobs = () => {
   // ✅ Fetch all applications with pagination
   const fetchAllApplications = () => {
     setLoading(true);
-    axios
+    api
       .get("/career/applications",{params: { page, size: pagesize },
                                   })
       .then((res) => {
