@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 // import axios from "axios";
 import { Loader2, Users, PlusCircle, Trash2, LayoutGrid, Upload } from "lucide-react";
 // const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
-import api from "../../api/axios.js"
+import api from "../../api/axios.js";
 
 
 const UploadNewClients = () => {
@@ -19,7 +19,7 @@ const UploadNewClients = () => {
   const fetchClients = async () => {
     try {
       const res = await api.get("/clients/all");
-      setClients(res.data);
+      setClients(res.data?.data || res.data || []);
       setError("");
     } catch {
       setError("Failed to load clients. Ensure server is running.");
