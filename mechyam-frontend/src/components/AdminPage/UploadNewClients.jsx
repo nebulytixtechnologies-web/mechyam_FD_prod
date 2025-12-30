@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+// import axios from "axios";
 import { Loader2, Users, PlusCircle, Trash2, LayoutGrid, Upload } from "lucide-react";
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+// const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+import api from "../../api/axios.js"
 
 
 const UploadNewClients = () => {
@@ -14,11 +15,10 @@ const UploadNewClients = () => {
 
   const token = sessionStorage.getItem("adminToken");
   const authHeader = token ? { Authorization: `Bearer ${token}` } : {};
-  const BASE_URL = `${API_BASE_URL}/clients`;
 
   const fetchClients = async () => {
     try {
-      const res = await axios.get(`${BASE_URL}/all`);
+      const res = await api.get("/clients/all");
       setClients(res.data);
       setError("");
     } catch {
@@ -39,8 +39,8 @@ const UploadNewClients = () => {
 
     try {
       setLoading(true);
-      await axios.post(
-        `${BASE_URL}/add`,
+      await api.post(
+        "/clients/add",
         { companyName, companyLocation },
         { headers: authHeader }
       );
@@ -60,7 +60,7 @@ const UploadNewClients = () => {
     if (!window.confirm("Are you sure you want to delete this client?")) return;
 
     try {
-      await axios.delete(`${BASE_URL}/delete/${id}`, { headers: authHeader });
+      await api.delete(`/clients/delete/${id}`, { headers: authHeader });
       fetchClients();
     } catch {
       alert("Delete failed. Try again.");
