@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
-import axios from "axios";
+// const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+// import axios from "axios";
+import api from "../../api/axios.js";
 
 const ContactDetails = () => {
   const [contacts, setContacts] = useState([]);
@@ -14,14 +15,18 @@ const ContactDetails = () => {
   const [selectedMessage, setSelectedMessage] = useState(null);
 
   useEffect(() => {
-    axios
+    api
       .get(
-        `${API_BASE_URL}/api/contact/all?pageNo=${pageNo}&pageSize=${pageSize}`
-      )
+        "/contact/all", {
+          params: {
+            pageNo,
+            pageSize,
+          },
+        })
       .then((res) => {
         const pageData = res.data.data;
-        setContacts(pageData.content || []);
-        setTotalPages(pageData.totalPages);
+        setContacts(pageData?.content || []);
+        setTotalPages(pageData?.totalPages || 1);
       })
       .catch((err) => console.error("Error fetching contact details:", err));
   }, [pageNo]);
