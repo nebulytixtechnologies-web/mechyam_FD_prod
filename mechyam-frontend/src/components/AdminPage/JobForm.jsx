@@ -1,7 +1,8 @@
 // src/components/AdminPage/JobForm.jsx
 import React, { useState } from "react";
-import axios from "axios";
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+// import axios from "axios";
+// const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+import api from "../../api/axios.js"
 
 
 // Convert USA format (MM/DD/YYYY) to HTML input format (YYYY-MM-DD)
@@ -59,7 +60,7 @@ const JobForm = ({ onAddJob }) => {
     // Prepare data for API
    const jobData = {
   ...formData,
-  closingDate: convertToInputDate(formData.closingDate), // FIX HERE
+  closingDate: convertToUSDate(formData.closingDate), // FIX HERE
   postedDate: new Date().toISOString(),
   numberOfOpenings: parseInt(formData.numberOfOpenings, 10),
   isActive: true,
@@ -70,14 +71,19 @@ const JobForm = ({ onAddJob }) => {
       setLoading(true);
 
       // POST request to backend API
-      const response = await axios.post(
-        `${API_BASE_URL}/api/career/jobs`,
-        jobData
+      const token = sessionStorage.getItem("adminToken");
+      
+      const response = await api.post(
+        "/career/jobs",
+        jobData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}` },
+        }
       );
 
       console.log("Job uploaded:", response.data);
 
-      
       alert("Job posted successfully!");
 
       // Update parent component if provided
