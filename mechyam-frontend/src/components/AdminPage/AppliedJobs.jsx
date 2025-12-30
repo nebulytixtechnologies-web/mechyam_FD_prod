@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+// import axios from "axios";
 import { Search, RotateCcw, Download, X } from "lucide-react";
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+// const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+import api from "../../api/axios.js";
 
 const AppliedJobs = () => {
   const [applications, setApplications] = useState([]);
@@ -23,7 +24,8 @@ const AppliedJobs = () => {
   const fetchAllApplications = () => {
     setLoading(true);
     axios
-      .get(`${API_BASE_URL}/api/career/applications?page=${page}&size=${pageSize}`)
+      .get("/career/applications",{params: { page, size: pagesize },
+                                  })
       .then((res) => {
         const data = res.data.data;
         setApplications(data?.content || []);
@@ -42,8 +44,8 @@ const AppliedJobs = () => {
     if (!searchJobId.trim()) return fetchAllApplications();
     setLoading(true);
 
-    axios
-      .get(`${API_BASE_URL}/api/career/applications/job/${searchJobId}`)
+    api
+      .get(`/career/applications/job/${searchJobId}`)
       .then((res) => {
         setApplications(res.data.data || []);
         setTotalPages(1);
@@ -67,8 +69,7 @@ const AppliedJobs = () => {
 
   // ✅ Resume download
   const handleDownload = (id) => {
-    const fileUrl = `${API_BASE_URL}/api/career/applications/${id}/resume`;
-    window.open(fileUrl, "_blank");
+    window.open(`/api/career/applications/${id}/resume`, "_blank");
   };
 
   return (
