@@ -1,7 +1,8 @@
 
 import React, { useState, useEffect } from "react";
-import axios from "axios";
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+// import axios from "axios";
+// const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+import api from "../../api/axios";
 
 
 const Projects = () => {
@@ -18,7 +19,7 @@ const Projects = () => {
   // -------------------------------------------------------
   const fetchProjects = async () => {
     try {
-      const res = await axios.get(`${API_BASE_URL}/api/projects`);
+      const res = await api.get("/projects");
       setProjects(res.data);
     } catch (error) {
       // Log any errors that occur during API call
