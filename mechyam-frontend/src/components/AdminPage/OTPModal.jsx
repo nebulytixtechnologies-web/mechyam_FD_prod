@@ -85,7 +85,7 @@ const OTPModal = ({ email, tempToken, onVerified, onClose }) => {
         "/admin/auth/verify-otp",
         { email, otp: otpCode },
         {
-          header: {Authorization: `Bearer ${tempToken}`},
+          headers: {Authorization: `Bearer ${tempToken}`},
         }
         );
       if (response.data?.token) {
@@ -94,7 +94,7 @@ const OTPModal = ({ email, tempToken, onVerified, onClose }) => {
       } else {
         setError("Invalid OTP");
       }
-    } catch {
+    } catch (err) {
       setError(err.response?.data?.message || "Server error");
     } finally {
       setSubmitting(false);
