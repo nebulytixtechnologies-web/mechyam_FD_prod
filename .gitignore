@@ -1,0 +1,47 @@
+# =====================
+# Node / React
+# =====================
+node_modules/
+dist/
+build/
+coverage/
+
+# =====================
+# Environment files
+# =====================
+.env
+.env.*
+!.env.example
+
+# =====================
+# Logs
+# =====================
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# =====================
+# OS / Editor
+# =====================
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+
+# =====================
+# Cache
+# =====================
+.cache/
+.eslintcache
+
+# =====================
+# Docker / Nginx
+# =====================
+*.log
+
+# =====================
+# Optional
+# =====================
+package-lock.json
+
