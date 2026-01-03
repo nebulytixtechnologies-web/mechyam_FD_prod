@@ -89,7 +89,7 @@ const OTPModal = ({ email, tempToken, onVerified, onClose }) => {
         }
         );
       if (response.data?.token) {
-        localStorage.setItem("adminToken", response.data.token);
+        sessionStorage.setItem("adminToken", response.data.token);
         onVerified(response.data.token);
       } else {
         setError("Invalid OTP");
