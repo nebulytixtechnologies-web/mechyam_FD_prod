@@ -23,8 +23,9 @@ import {
   FileText,
 } from "lucide-react";
 
-import axios from "axios";
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+// import axios from "axios";
+// const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+import api from "../api/axios.js"; 
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
@@ -62,13 +63,15 @@ const AdminDashboard = () => {
   const handleLogoutClick = async () => {
     try {
       setLoadingLogout(true);
-      await axios.post(
-        `${API_BASE_URL}/api/admin/auth/logout`,
-        {},
-        {
-          headers: { Authorization: `Bearer ${sessionStorage.getItem("adminToken")}` },
-        }
-      );
+      // await axios.post(
+      //   `${API_BASE_URL}/api/admin/auth/logout`,
+      //   {},
+      //   {
+      //     headers: { Authorization: `Bearer ${sessionStorage.getItem("adminToken")}` },
+      //   }
+      // );
+      await api.post("/admin/auth/logout");
+      
       sessionStorage.clear();
       navigate("/admin/login");
     } catch (err) {
