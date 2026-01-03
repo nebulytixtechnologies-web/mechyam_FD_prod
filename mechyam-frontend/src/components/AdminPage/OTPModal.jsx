@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 // const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
-import api from "../../api/axios.js";
+import api from "../../src/api/axios.js";
 
 const OTPModal = ({ email, tempToken, onVerified, onClose }) => {
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);
