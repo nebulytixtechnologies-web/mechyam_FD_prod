@@ -64,10 +64,10 @@ const DashboardHome = ({ setActivePage }) => {
                 ? res.data.data
                 : [];
 
-        const jobs = extractArray(jobsRes);
+        const jobs = extractArray(jobRes);
         const clients = extractArray(clientsRes);
-        const projects = extractArray(projectsRes);
-        const applications = extractArray(applicationsRes);
+        const projects = extractArray(projectRes);
+        const applications = extractArray(applicationRes);
 
         // ✅ Calculate total applicants count correctly
         let totalApplicants = 0;
