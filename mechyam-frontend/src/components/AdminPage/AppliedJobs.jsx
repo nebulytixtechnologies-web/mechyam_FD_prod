@@ -24,7 +24,7 @@ const AppliedJobs = () => {
   const fetchAllApplications = () => {
     setLoading(true);
     api
-      .get("/career/applications",{params: { page, size: pagesize },
+      .get("/career/applications",{params: { page: page , size: pageSize },
                                   })
       .then((res) => {
         const data = res.data.data;
