@@ -14,7 +14,7 @@ const api = axios.create({
 api.interceptors.request.use(
   (config) => {
     // Make sure the key "adminToken" matches what you used in OTPModal.jsx
-    const token = localStorage.getItem("adminToken"); 
+    const token = sessionStorage.getItem("adminToken"); 
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
