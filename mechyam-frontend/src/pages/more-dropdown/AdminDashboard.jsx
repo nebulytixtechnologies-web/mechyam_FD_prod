@@ -63,6 +63,8 @@ const AdminDashboard = () => {
   const handleLogoutClick = async () => {
     try {
       setLoadingLogout(true);
+       // Get token from sessionStorage
+      const token = sessionStorage.getItem("adminToken");
       // await axios.post(
       //   `${API_BASE_URL}/api/admin/auth/logout`,
       //   {},
@@ -70,15 +72,19 @@ const AdminDashboard = () => {
       //     headers: { Authorization: `Bearer ${sessionStorage.getItem("adminToken")}` },
       //   }
       // );
-      await api.post("/admin/auth/logout");
+       // Attempt server-side logout
+      await api.post("/admin/auth/logout", {}, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
       
-      sessionStorage.clear();
-      navigate("/admin/login");
     } catch (err) {
-      console.error("Logout failed:", err);
+      console.error("Logout request failed (likely expired token):", err);
       alert("Logout failed. Please try again.");
     } finally {
+      // ALWAYS clear local data and redirect, even if the 403 occurred
+      sessionStorage.clear();
       setLoadingLogout(false);
+      navigate("/admin/login");
     }
   };
 
