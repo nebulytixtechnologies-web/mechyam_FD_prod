@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 // import axios from "axios";
 import { FileText, User, Users } from "lucide-react";
 // const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
-import api from "../../api/axios.js";
+import api from "../api/axios.js";
 
 const Applications = () => {
   const [applications, setApplications] = useState([]);
