@@ -61,8 +61,8 @@ const Applications = () => {
             name: app.fullName || "Unknown Applicant",
             email: app.email || "N/A",
             phone: app.phoneNumber || "N/A",
+            // resumeUrl: `13.203.229.88{app.id}/resume`,
             resumeUrl: `13.203.229.88{app.id}/resume`,
-
           });
         });
 
