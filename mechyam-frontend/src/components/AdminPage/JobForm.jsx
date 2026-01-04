@@ -57,14 +57,28 @@ const JobForm = ({ onAddJob }) => {
       return;
     }
 
+      // --- SECURE DATE FORMATTING ---
+    let formattedClosingDate = "";
+    if (formData.closingDate) {
+      // HTML input type="date" gives YYYY-MM-DD
+      const [year, month, day] = formData.closingDate.split("-");
+      if (year && month && day) {
+        formattedClosingDate = `${month}/${day}/${year}`;
+      }
+    }
+
+    // Today's date in US format
+    const today = new Date();
+    const postedDateFormatted = `${String(today.getMonth() + 1).padStart(2, '0')}/${String(today.getDate()).padStart(2, '0')}/${today.getFullYear()}`;
+
     // Prepare data for API
-   const jobData = {
-  ...formData,
-  closingDate: convertToUSDate(formData.closingDate), // FIX HERE
-  postedDate: new Date().toISOString(),
-  numberOfOpenings: parseInt(formData.numberOfOpenings, 10),
-  isActive: true,
-};
+    const jobData = {
+      ...formData,
+      closingDate: formattedClosingDate,
+      postedDate: postedDateFormatted,
+      numberOfOpenings: parseInt(formData.numberOfOpenings, 10),
+      isActive: true,
+    };
 
 
     try {
