@@ -43,7 +43,7 @@ const Applications = () => {
         console.log("🟢 Extracted Applications Data:", data);
 
         // Group applications by job
-        // const jobMap = {};
+        const jobMap = {};
         // data.forEach((app) => {
         //   const jobCode = app.job?.id || "UNKNOWN";
         //   const jobTitle = app.job?.jobTitle || "Untitled Job";
