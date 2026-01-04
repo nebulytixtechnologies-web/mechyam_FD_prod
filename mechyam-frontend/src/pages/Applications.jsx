@@ -44,10 +44,6 @@ const Applications = () => {
 
         // Group applications by job
         const jobMap = {};
-        // data.forEach((app) => {
-        //   const jobCode = app.job?.id || "UNKNOWN";
-        //   const jobTitle = app.job?.jobTitle || "Untitled Job";
-
         data.forEach((app) => {
           const jobCode = app.job?.id || "UNKNOWN";
           const jobTitle = app.job?.jobTitle || "Untitled Job";
