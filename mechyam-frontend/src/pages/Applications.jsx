@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
+// import axios from "axios";
 import { FileText, User, Users } from "lucide-react";
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+// const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+import api from "../../api/axios.js";
 
 const Applications = () => {
   const [applications, setApplications] = useState([]);
@@ -15,12 +16,17 @@ const Applications = () => {
       try {
         const token = sessionStorage.getItem("adminToken");
 
-        const response = await axios.get(
-          `${API_BASE_URL}/api/career/applications`,
-          {
-            headers: { Authorization: `Bearer ${token}` },
-          }
-        );
+        // const response = await axios.get(
+        //   `${API_BASE_URL}/api/career/applications`,
+        //   {
+        //     headers: { Authorization: `Bearer ${token}` },
+        //   }
+        // );
+
+         // Use the 'api' instance instead of raw axios
+        const response = await api.get("/career/applications", {
+          headers: { Authorization: `Bearer ${token}` },
+        });
 
         console.log("🟢 Raw Applications API Response:", response.data);
 
@@ -37,7 +43,11 @@ const Applications = () => {
         console.log("🟢 Extracted Applications Data:", data);
 
         // Group applications by job
-        const jobMap = {};
+        // const jobMap = {};
+        // data.forEach((app) => {
+        //   const jobCode = app.job?.id || "UNKNOWN";
+        //   const jobTitle = app.job?.jobTitle || "Untitled Job";
+
         data.forEach((app) => {
           const jobCode = app.job?.id || "UNKNOWN";
           const jobTitle = app.job?.jobTitle || "Untitled Job";
@@ -55,7 +65,8 @@ const Applications = () => {
             name: app.fullName || "Unknown Applicant",
             email: app.email || "N/A",
             phone: app.phoneNumber || "N/A",
-            resumeUrl: `http://192.168.1.192:8080/mechyam/api/career/applications/${app.id}/resume`,
+            resumeUrl: `13.203.229.88{app.id}/resume`,
+
           });
         });
 
