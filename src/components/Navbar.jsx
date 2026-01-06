@@ -400,7 +400,7 @@ const Navbar = () => {
                 </Link>
               </li>
               <li>
-                <Link to="/admin-login" onClick={() => setMenuOpen(false)}>
+                <Link to="/admin/login" onClick={() => setMenuOpen(false)}>
                   Admin Login
                 </Link>
               </li>
