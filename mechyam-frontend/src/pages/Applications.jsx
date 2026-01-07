@@ -356,11 +356,18 @@ const Applications = () => {
       });
 
       setCurrentApplicantName(applicantName || "resume");
-      setResumePdfBinary(response.data);
+      // setResumePdfBinary(response.data);
 
-      const fileURL = URL.createObjectURL(
-        new Blob([response.data], { type: "application/pdf" })
-      );
+      // const fileURL = URL.createObjectURL(
+      //   new Blob([response.data], { type: "application/pdf" })
+      // );
+
+    const blob = new Blob([response.data], { type: "application/pdf" });
+
+     setResumeUrlPreview(blob);   // NOT a URL
+     setZoomLevel(1);
+     setShowResumeModal(true);
+
 
       setResumeUrlPreview(fileURL);
       setZoomLevel(1);
