@@ -319,7 +319,7 @@ const Applications = () => {
             email: app.email,
             phone: app.phoneNumber,
             // resumeUrl: `${API_BASE_URL}/api/career/applications/${app.id}/resume`,
-            resumeUrl: `/career/applications/${app?.id}/resume`,
+            resumeUrl: `/api/career/applications/${app?.id}/resume`,
             job: app.job,
             linkedinUrl: app.linkedinUrl,
             portfolioUrl: app.portfolioUrl,
@@ -348,6 +348,7 @@ const Applications = () => {
 
       const response = await api.get(url, {
         responseType: "blob",
+        validateStatus: () => true,  // don't auto-throw
         headers: {
           Authorization: "Bearer " + token,
           Accept: "application/pdf"
