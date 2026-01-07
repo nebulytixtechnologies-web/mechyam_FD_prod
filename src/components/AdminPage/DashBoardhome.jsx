@@ -5,7 +5,11 @@ import { Briefcase, Users, Building2, PlusCircle, FileText } from  "lucide-react
 // import axios from "axios";
 import Applications from "../../pages/Applications"; // ✅ imported
 // const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
-import api from "../../api/axios.js";
+//import api from "../../api/axios.js";
+import axios from "axios";
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
+
 
 const DashboardHome = ({ setActivePage }) => {
   const [stats, setStats] = useState({
