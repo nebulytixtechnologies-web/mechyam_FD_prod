@@ -267,6 +267,9 @@ const Applications = () => {
   // used to name downloaded resume file
   const [currentApplicantName, setCurrentApplicantName] = useState("resume");
 
+  const [resumePdfBinary, setResumePdfBinary] = useState(null);
+
+
   // ================== FETCH ALL APPLICATIONS ==================
   useEffect(() => {
     const fetchAllApplications = async () => {
@@ -352,6 +355,7 @@ const Applications = () => {
       });
 
       setCurrentApplicantName(applicantName || "resume");
+      setResumePdfBinary(response.data);
 
       const fileURL = URL.createObjectURL(
         new Blob([response.data], { type: "application/pdf" })
@@ -368,6 +372,11 @@ const Applications = () => {
 
   // ================== DOWNLOAD RESUME ==================
   const handleDownload = () => {
+    if (!resumePdfBinary) return;
+
+    const blob = new Blob([resumePdfBinary], { type: "application/pdf" });
+    const url = URL.createObjectURL(blob);
+    
     const link = document.createElement("a");
     link.href = resumeUrlPreview;
     link.download = `${currentApplicantName}.pdf`;
@@ -618,7 +627,7 @@ const Applications = () => {
 
             <div className="flex-1 overflow-auto bg-gray-600 flex justify-center items-start">
               {resumeUrlPreview && (
-                <Document file={resumeUrlPreview} loading="Loading PDF...">
+                <Document file={{ data: resumePdfBinary }} loading="Loading PDF...">
                   <Page
                     pageNumber={1}
                     scale={zoomLevel}
