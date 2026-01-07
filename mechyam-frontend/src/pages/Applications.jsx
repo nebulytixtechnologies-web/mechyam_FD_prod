@@ -317,7 +317,7 @@ const Applications = () => {
             email: app.email,
             phone: app.phoneNumber,
             // resumeUrl: `${API_BASE_URL}/api/career/applications/${app.id}/resume`,
-            resumeUrl: `/api/career/applications/${app?.id}/resume`,
+            resumeUrl: `/career/applications/${app?.id}/resume`,
             job: app.job,
             linkedinUrl: app.linkedinUrl,
             portfolioUrl: app.portfolioUrl,
