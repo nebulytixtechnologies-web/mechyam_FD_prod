@@ -267,8 +267,6 @@ const Applications = () => {
   // used to name downloaded resume file
   const [currentApplicantName, setCurrentApplicantName] = useState("resume");
 
-  const [resumePdfBinary, setResumePdfBinary] = useState(null);
-
 
   // ================== FETCH ALL APPLICATIONS ==================
   useEffect(() => {
@@ -347,7 +345,7 @@ const Applications = () => {
       const token = sessionStorage.getItem("adminToken");
 
       const response = await api.get(url, {
-        responseType: "blob",
+        responseType: "arraybuffer",
         validateStatus: () => true,  // don't auto-throw
         headers: {
           Authorization: "Bearer " + token,
@@ -368,10 +366,10 @@ const Applications = () => {
      setZoomLevel(1);
      setShowResumeModal(true);
 
-
-      setResumeUrlPreview(fileURL);
-      setZoomLevel(1);
-      setShowResumeModal(true);
+      // setResumeUrlPreview(fileURL);
+      // setZoomLevel(1);
+      // setShowResumeModal(true);
+      
     } catch (e) {
       console.error("Resume preview error:", e);
       alert("Unable to preview resume");
@@ -380,15 +378,17 @@ const Applications = () => {
 
   // ================== DOWNLOAD RESUME ==================
   const handleDownload = () => {
-    if (!resumePdfBinary) return;
+    if (!resumeUrlPreview) return;
 
-    const blob = new Blob([resumePdfBinary], { type: "application/pdf" });
-    const url = URL.createObjectURL(blob);
+    // const blob = new Blob([resumePdfBinary], { type: "application/pdf" });
+    const url = URL.createObjectURL(resumeUrlPreview);
     
     const link = document.createElement("a");
     link.href = resumeUrlPreview;
     link.download = `${currentApplicantName}.pdf`;
     link.click();
+
+    URL.revokeObjectURL(url);
   };
 
   // ================== MAIN UI STATES ==================
@@ -635,7 +635,7 @@ const Applications = () => {
 
             <div className="flex-1 overflow-auto bg-gray-600 flex justify-center items-start">
               {resumeUrlPreview && (
-                <Document file={{ data: resumePdfBinary }} loading="Loading PDF...">
+                <Document file={resumeUrlPreview} loading="Loading PDF...">
                   <Page
                     pageNumber={1}
                     scale={zoomLevel}
