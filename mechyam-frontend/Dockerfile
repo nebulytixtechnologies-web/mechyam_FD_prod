@@ -1,33 +1,33 @@
 # ---------- BUILD STAGE ----------
-FROM node:20-alpine AS build
+FROM node:18-alpine AS build
 
 WORKDIR /app
 
+# Copy dependency files first (cache optimization)
+COPY package.json package-lock.json ./
+
 # Install dependencies
-COPY package*.json ./
-RUN npm ci
+RUN npm install
 
 # Copy source code
 COPY . .
 
-# Build production files (Vite → dist/)
+# Build React/Vite app
 RUN npm run build
 
 
-# ---------- RUNTIME STAGE ----------
-FROM nginx:1.25-alpine
+# ---------- PRODUCTION STAGE ----------
+FROM nginx:alpine
 
 # Remove default nginx config
 RUN rm /etc/nginx/conf.d/default.conf
 
-# Copy nginx.conf (FROM ROOT, not nginx/)
+# Copy custom nginx config
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-# Copy built frontend
+# Copy build output
 COPY --from=build /app/dist /usr/share/nginx/html
 
-# Expose HTTP port
 EXPOSE 80
 
-# Run nginx
 CMD ["nginx", "-g", "daemon off;"]
