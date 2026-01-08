@@ -1,6 +1,5 @@
 docker compose using: 
 services:
-
   redis:
     image: redis:7
     container_name: redis
@@ -34,11 +33,8 @@ services:
       - SPRING_REDIS_HOST=redis
       - SPRING_REDIS_PORT=6379
       - SERVER_FORWARD_HEADERS_STRATEGY=native
-
     volumes:
       - /opt/mechyam/uploads:/uploads
-
-
     networks:
       - mechyam-net
 
