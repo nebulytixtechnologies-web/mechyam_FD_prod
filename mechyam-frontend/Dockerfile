@@ -1,10 +1,23 @@
 # ---------- BUILD STAGE ----------
-FROM node:18-alpine AS build
+FROM node:22-alpine AS build
+
+# Step 2: Install build tools for packages like cwebp-bin
+RUN apk add --no-cache \
+    python3 \
+    make \
+    g++ \
+    autoconf \
+    automake \
+    libtool \
+    nasm \
+    libpng-dev \
+    zlib-dev
 
 WORKDIR /app
 
 # Copy dependency files first (cache optimization)
-COPY package.json ./
+COPY package.json package-lock.json ./
+
 
 # Install dependencies
 RUN npm install
