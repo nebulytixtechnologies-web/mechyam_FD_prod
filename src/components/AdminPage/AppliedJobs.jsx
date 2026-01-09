@@ -66,10 +66,43 @@ const AppliedJobs = () => {
   };
 
   // ✅ Resume download
-  const handleDownload = (id) => {
-    const fileUrl = `${API_BASE_URL}/api/career/applications/${id}/resume`;
-    window.open(fileUrl, "_blank");
+//  const handleDownload = (id) => {
+  //  const fileUrl = `${API_BASE_URL}/api/career/applications/${id}/resumie`;
+    //window.open(fileUrl, "_blank");
+  //};
+   
+    const handleDownload = async (id, applicantName = "resume") => {
+  try {
+    const token = sessionStorage.getItem("adminToken");
+
+    const res = await axios.get(
+      `${API_BASE_URL}/api/career/applications/${id}/resume`,
+      {
+        responseType: "blob",
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      }
+    );
+
+    const url = window.URL.createObjectURL(
+      new Blob([res.data], { type: "application/pdf" })
+    );
+
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `${applicantName}.pdf`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+
+    window.URL.revokeObjectURL(url);
+  } catch (err) {
+    console.error("Resume download failed", err);
+    alert("Failed to download resume");
+  }
   };
+
 
   return (
     <div>
@@ -219,7 +252,7 @@ const AppliedJobs = () => {
             </div>
 
             <button
-              onClick={() => handleDownload(selectedApp.id)}
+              onClick={() => handleDownload(selectedApp.id,selectedApp.fullName)}
               className="mt-4 px-4 py-2 w-full bg-blue-700 text-white rounded-lg flex items-center justify-center gap-2 hover:bg-blue-900"
             >
               <Download size={18} /> Download Resume

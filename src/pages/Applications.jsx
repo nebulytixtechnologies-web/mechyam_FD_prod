@@ -106,40 +106,125 @@ const Applications = () => {
 
 
   // ================== RESUME PREVIEW HANDLER ==================
-  const handlePreviewResume = async (url, applicantName) => {
-    try {
-      const token = sessionStorage.getItem("adminToken");
+//  const handlePreviewResume = async (url, applicantName) => {
+//    try {
+//      const token = sessionStorage.getItem("adminToken");
+//      setShowResumeModal(false);
+//      setResumeUrlPreview(null);
 
-      const response = await axios.get(url, {
-        responseType: "blob",
-        headers: {
-          Authorization: "Bearer " + token,
-          Accept: "application/pdf"
-        }
-      });
+//      const response = await axios.get(url, {
+//      responseType: "blob",
+//        headers: {
+//          Authorization: "Bearer " + token,
+//          Accept: "application/pdf"
+//        }
+//      });
+//
+//      setCurrentApplicantName(applicantName || "resume");
 
-      setCurrentApplicantName(applicantName || "resume");
+//      const fileURL = URL.createObjectURL(
+//        new Blob([response.data], { type: "application/pdf" })
+//      );
 
-      const fileURL = URL.createObjectURL(
-        new Blob([response.data], { type: "application/pdf" })
-      );
+//      setResumeUrlPreview(fileURL);
+//      setZoomLevel(1);
+//      setShowResumeModal(true);
+//    } catch (e) {
+//      console.error("Resume preview error:", e);
+//      alert("Unable to preview resume");
+//    }
+//  };
+    
 
-      setResumeUrlPreview(fileURL);
-      setZoomLevel(1);
-      setShowResumeModal(true);
-    } catch (e) {
-      console.error("Resume preview error:", e);
-      alert("Unable to preview resume");
+
+//   const handlePreviewResume = async (url, applicantName) => {
+//  try {
+//    const token = sessionStorage.getItem("adminToken");
+
+//    setShowResumeModal(false);
+//    setResumeUrlPreview(null);
+
+//    const response = await axios.get(url, {
+//      responseType: "blob",
+//      headers: {
+//        Authorization: "Bearer " + token,
+//        Accept: "application/pdf",
+//      },
+//    });
+
+//    // ❌ Not a PDF
+//    if (response.data.type !== "application/pdf") {
+//      alert("Preview available only for PDF resumes. Please download.");
+//      return;
+//    }
+//
+//    const fileURL = URL.createObjectURL(response.data);
+//
+//    setCurrentApplicantName(applicantName || "resume");
+//    setResumeUrlPreview(fileURL);
+//    setZoomLevel(1);
+//    setShowResumeModal(true);
+//  } catch (err) {
+//    console.error("Resume preview error:", err);
+//    alert("Unable to preview resume");
+//  }
+//};
+    const handlePreviewResume = async (url, applicantName) => {
+  try {
+    const token = sessionStorage.getItem("adminToken");
+
+    // 🔐 Fetch PDF with JWT
+    const response = await axios.get(url, {
+      responseType: "blob",
+      headers: {
+        Authorization: "Bearer " + token,
+        Accept: "application/pdf",
+      },
+    });
+
+    // ❌ Not a PDF
+    if (response.data.type !== "application/pdf") {
+      alert("Preview available only for PDF resumes. Please download.");
+      return;
     }
-  };
 
+    // ✅ Create Blob URL
+    const blobUrl = URL.createObjectURL(
+      new Blob([response.data], { type: "application/pdf" })
+    );
+
+    setCurrentApplicantName(applicantName || "resume");
+    setResumeUrlPreview(blobUrl);
+    setZoomLevel(1);
+    setShowResumeModal(true);
+  } catch (error) {
+    console.error("Resume preview failed:", error);
+    alert("Failed to load resume preview");
+  }
+};
+
+
+   
   // ================== DOWNLOAD RESUME ==================
-  const handleDownload = () => {
-    const link = document.createElement("a");
-    link.href = resumeUrlPreview;
-    link.download = `${currentApplicantName}.pdf`;
-    link.click();
-  };
+//  const handleDownload = () => {
+//    const link = document.createElement("a");
+//    link.href = resumeUrlPreview;
+//    link.download = `${currentApplicantName}.pdf`;
+//    link.click();
+//  };
+    
+   const handleDownload = () => {
+  const link = document.createElement("a");
+  link.href = resumeUrlPreview;
+
+  // 🔑 IMPORTANT: do NOT force extension
+  link.download = currentApplicantName || "";
+
+  document.body.appendChild(link);
+  link.click();
+  document.body.removeChild(link);
+};
+
 
   // ================== MAIN UI STATES ==================
   if (loading) {
@@ -385,7 +470,13 @@ const Applications = () => {
 
             <div className="flex-1 overflow-auto bg-gray-600 flex justify-center items-start">
               {resumeUrlPreview && (
-                <Document file={resumeUrlPreview} loading="Loading PDF...">
+               // <Document file={resumeUrlPreview} loading="Loading PDF...">
+		  <Document
+		  key={resumeUrlPreview}   
+		  file={resumeUrlPreview}
+		  loading="Loading PDF..."
+		   >
+
                   <Page
                     pageNumber={1}
                     scale={zoomLevel}
