@@ -958,4 +958,5 @@ if (selectedJob) {
     </div>
   );
 };
+export default Applications;
 
